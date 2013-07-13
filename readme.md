@@ -1,4 +1,4 @@
-HTML5 Photo finish
+Ulam spiral
 =======
 Javascript implementation of ["Ulam spiral"](http://en.wikipedia.org/wiki/Ulam_spiral).
 More info [here](http://lab.ejci.net/UlamSpiral/).
