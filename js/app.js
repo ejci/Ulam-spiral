@@ -166,7 +166,6 @@
             context.rect(0, 0, width, height);
             context.fillStyle = '#fff';
             context.fill();
-            context.stroke();
             var spiral = new Spiral();
             spiral.generate();
             $('#canvas').css('width', '100%');
