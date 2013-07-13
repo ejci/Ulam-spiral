@@ -3,7 +3,7 @@
 (function(win, doc, nav) {
     var canvas, context, width, height, num, size, resolution;
     var Spiral = function() {
-        var radius = resolution || 6;
+        var radius = (resolution / 2) || 6;
         //init is -1,-1
         var point = {
             x : 0,
@@ -154,9 +154,9 @@
             if (canvasSize < 1) {
                 throw 'Size of spiral must be > 0'
             }
-            resolution = 6;
+            resolution = 12;
             canvas = doc.getElementById("canvas");
-            canvas.width = (canvasSize * resolution * 2);
+            canvas.width = (canvasSize * resolution);
             if (canvas.width != canvas.height) {
                 canvas.height = canvas.width;
             }
