@@ -137,7 +137,7 @@
 
             resolution = 6;
             canvas = doc.getElementById("canvas");
-            canvas.width = (canvasSize * resolution);
+            canvas.width = (canvasSize * resolution * 2);
             if (canvas.width != canvas.height) {
                 canvas.height = canvas.width;
             }
