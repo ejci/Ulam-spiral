@@ -147,11 +147,11 @@
             $('#canvas').hide();
             $('#error').hide();
             num = parseInt($('#startNum').val(), 10);
-            if (num < 1) {
+            if (num < 1 || num != $('#startNum').val()) {
                 throw 'Starting number must be > 0'
             }
             var canvasSize = parseInt($('#canvasSize').val(), 10);
-            if (canvasSize < 1) {
+            if (canvasSize < 1 || canvasSize != $('#canvasSize').val()) {
                 throw 'Size of spiral must be > 0'
             }
             resolution = 12;
