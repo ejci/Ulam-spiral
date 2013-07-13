@@ -73,31 +73,51 @@
                 radius : radius
             });
             var cont = true;
+            if (window.Worker) {
+                //creates a worker
+                var primeWorker = new Worker("js/worker.prime.js");
+                primeWorker.onmessage = function(oEvent) {
+                    var data = JSON.parse(oEvent.data);
+                    var pointToDraw = data;
+                    drawPoint(pointToDraw);
+                };
+            }
             do {
                 for (var k = 0; k < 2; k++) {
                     for (var ds = 0; ds < directionSteps; ds += 1) {
                         i += 1;
                         //increment number
                         point = setDirection(point, directionIndex);
-                        var pointToDraw = {};
-                        if (isPrime(i)) {
-                            pointToDraw = {
-                                x : point.x,
-                                y : point.y,
-                                color : '#000',
-                                radius : radius / 2
-                            };
-                        } else {
-                            pointToDraw = {
-                                x : point.x,
-                                y : point.y,
-                                color : '#ddd',
-                                radius : 1
-                            };
-                        }
-                        var ret = drawPoint(pointToDraw);
 
-                        if (!ret || i > ((width / radius) * (width / radius) - 1)) {
+                        if (window.Worker) {
+                            //post to worker
+                            primeWorker.postMessage(JSON.stringify({
+                                point : point,
+                                number : i,
+                                radius : radius
+                            }));
+                        } else {
+                            //no web worker :()
+                            var pointToDraw = {};
+                            if (isPrime(i)) {
+                                pointToDraw = {
+                                    x : point.x,
+                                    y : point.y,
+                                    color : '#000',
+                                    radius : radius / 2
+                                };
+                            } else {
+                                pointToDraw = {
+                                    x : point.x,
+                                    y : point.y,
+                                    color : '#ddd',
+                                    radius : 1
+                                };
+                            }
+                            drawPoint(pointToDraw);
+                        }
+
+                        if (i > ((width / radius) * (width / radius) - 1)) {
                             cont = false;
                             return;
                         }
@@ -124,7 +144,7 @@
     //generate
     var generate = function() {
         try {
-            $('#canvas').fadeOut();
+            $('#canvas').hide();
             $('#error').hide();
             num = parseInt($('#startNum').val(), 10);
             if (num < 1) {
@@ -134,7 +154,6 @@
             if (canvasSize < 1) {
                 throw 'Size of spiral must be > 0'
             }
-
             resolution = 6;
             canvas = doc.getElementById("canvas");
             canvas.width = (canvasSize * resolution * 2);
@@ -144,11 +163,14 @@
             width = parseInt(canvas.width, 10);
             height = parseInt(canvas.height, 10)
             context = canvas.getContext("2d");
-            context.clearRect(0, 0, width, height);
+            context.rect(0, 0, width, height);
+            context.fillStyle = '#fff';
+            context.fill();
+            context.stroke();
             var spiral = new Spiral();
             spiral.generate();
             $('#canvas').css('width', '100%');
-            $('#canvas').fadeIn();
+            $('#canvas').show();
         } catch(e) {
             console.log(e);
             $('#error').html('<strong>Hmm...</strong>&nbsp;' + e);
